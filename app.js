@@ -1,11 +1,11 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
+//var favicon = require('serve-favicon');
+//var logger = require('morgan');
+//var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var stylus = require('stylus');
-var expressValidator = require('express-validator');
+//var expressValidator = require('express-validator');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -18,10 +18,10 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+//app.use(cookieParser());
 app.use(stylus.middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -33,6 +33,7 @@ app.use('/users', users);
 app.use(express.static('public'));
 //var tools = require('./public/javascripts/sample.js');
 
+/*
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
@@ -49,7 +50,7 @@ app.use(expressValidator({
     };
   }
 }));
-
+*/
 
 app.get('/', function(req, res){
   res.render('layout', {
@@ -73,12 +74,13 @@ app.post('/', function(req, res) {
 	console.log(req.body.latitude);
 
 	// req.checkBody('term', 'Search term required').notEmpty();
+	/**
 	var errors = req.validationErrors();
 	if(errors) {
 		console.log('errors');
 
 	} 
-
+*/
 	var sort = "rating";
 	switch(Math.floor(Math.random()*4)) {
 		case 0:
