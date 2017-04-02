@@ -1,0 +1,80 @@
+doctype
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    // link(rel='stylesheet', href='/stylesheets/chunkfive-fontface.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')
+  body
+    block content
+    h1 Yu-Lin's Yelp Recommender
+    h2 Would you like to see random restaurants in your location?
+    .container()
+        div(class="btn-group btn-group-lg btn-group-justified",role = "group", aria-label="...")
+          .btn-group(role="group")#the1
+            form(method = "POST" action = "/")
+              input(type="hidden" name="latitude" value=0)
+              input(type="hidden" name="longitude" value=0)
+              button(type="submit",class="btn btn-default", value="Submit") Yes
+          .btn-group(role="group")
+            form(method = "POST" action = "/users/add")
+              button(type="submit",class="btn btn-default", value="Submit") No
+    br
+    br
+    section#2
+      ul
+        if click
+          for result in list
+            li #{result.name} and the rating for this restaurant is: #{result.rating}
+        else
+          h5 click yes and that list will appear here
+
+
+    br
+    br
+    br
+    section#3
+
+      h3 Ignore everything below thisss
+      p= list
+      block rando
+      button(onclick="getLocation()") Try it
+      p(id = "demo")
+      // script(src='/public/javascripts/sample.js')
+    form(method="POST" action="/")
+
+      input(type = "submit" value="Submit2" onclick="getLocation")
+
+
+
+
+    script.
+      var x = document.getElementById("demo");
+      window.onload = function getLocation() {
+
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(showPosition);
+          } else { 
+              x.innerHTML = "Geolocation is not supported by this browser.";
+          }
+      }
+
+      function showPosition(position) {
+          x.innerHTML = "Latitude: " + position.coords.latitude + 
+          "<br>Longitude: " + position.coords.longitude;
+          document.querySelector("[name='latitude']").value = position.coords.latitude;
+          document.querySelector("[name='longitude']").value = position.coords.longitude;
+          document.querySelector("[type='submit']").removeAttribute("disabled");
+          temp();
+
+      }
+      function temp() {
+          let iterable = [10, 20, 30];
+          for (let value of iterable) {
+            value += 1;
+            console.log(value);
+          }
+      }
+
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js")
