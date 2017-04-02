@@ -96,7 +96,7 @@ app.post('/', function(req, res) {
 			sort = "distance"
 			break;
 	}
-	sort = "best_match";
+	//sort = "best_match";
 	const searchRequest = {
 		latitude: req.body.latitude,
 		longitude: req.body.longitude,
