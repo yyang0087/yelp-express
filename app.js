@@ -30,7 +30,7 @@ app.use('/users', users);
 
 // BEGIN MY WORK
 
-app.use(express.static('public'));
+app.use('/static', express.static('public'));
 //var tools = require('./public/javascripts/sample.js');
 
 /*
@@ -116,11 +116,12 @@ app.post('/', function(req, res) {
 	    var result =[];
 	    for (var i = response.jsonBody.businesses.length - 1; i >= 0; i--) {
 	      var n = response.jsonBody.businesses[i].name;
-	      var r = response.jsonBody.businesses[i].rating;
-	      //var u = response.jsonBody.businesses[i].url;
-	      //var p = response.jsonBody.businesses[i].image_url;
-	      //result.push({name: n, rating: r, url: u, image: p});
-	      result.push({name: n, rating: r});
+	      var r = response.jsonBody.businesses[i].price;
+	      var u = response.jsonBody.businesses[i].url;
+	      var p = response.jsonBody.businesses[i].image_url;
+	      var d = Math.floor(response.jsonBody.businesses[i].distance)/1000;
+	      result.push({name: n, rating: r, url: u, image: p, distance: d});
+
 	    }
 	    console.log(result);
 

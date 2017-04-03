@@ -6,7 +6,9 @@ a {
   color: #00b7ff;
 }
 body h1,
-h2 {
+h2,
+h3,
+h5 {
   color: #069;
   text-align: center;
 }
@@ -16,4 +18,34 @@ h2 {
 .btn-primary:visited,
 .btn-primary:focus {
   color: #ffc0cb;
+}
+body .container #groupbuttons {
+  text-align: center;
+}
+body .container #searchbutton {
+  text-align: center;
+}
+#searchbutton #box {
+  text-align: center;
+}
+body #content {
+  text-align: center;
+}
+ul {
+  list-style-type: none;
+}
+.container .row #bob {
+  text-align: left;
+}
+.container .row #bob #yelp {
+  text-align: right;
+}
+.container .row #bob2 img {
+  border-radius: 10px;
+}
+.container .row #bob img {
+  border-radius: 10px;
+}
+#content .container .rectangle {
+  text-align: center;
 }
