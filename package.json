@@ -4,7 +4,8 @@
   "description": "Yelp Demo using express.js",
   "main": "app.js",
   "engines": {
-    "node": "6.8.0"
+    "node": "6.8.0",
+    "npm": "4.4.4"
   },
   "scripts": {
     "start": "nodemon ./bin/www"
