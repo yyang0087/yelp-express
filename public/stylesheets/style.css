@@ -8,7 +8,9 @@ a {
 body h1,
 h2,
 h3,
-h5 {
+h4,
+h5,
+h6 {
   color: #069;
   text-align: center;
 }
@@ -27,6 +29,10 @@ body .container #searchbutton {
 }
 #searchbutton #box {
   text-align: center;
+}
+#inputbox {
+  width: 400px;
+  border-radius: 5px;
 }
 body #content {
   text-align: center;
@@ -48,4 +54,7 @@ ul {
 }
 #content .container .rectangle {
   text-align: center;
+}
+.hide {
+  display: none;
 }

@@ -5,7 +5,7 @@ var path = require('path');
 //var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var stylus = require('stylus');
-//var expressValidator = require('express-validator');
+var expressValidator = require('express-validator');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -33,7 +33,11 @@ app.use('/users', users);
 app.use('/static', express.static('public'));
 //var tools = require('./public/javascripts/sample.js');
 
-/*
+//Global vars
+app.use(function(req, res, next) {
+	res.locals.errors = null;
+	next();
+});
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
@@ -50,7 +54,7 @@ app.use(expressValidator({
     };
   }
 }));
-*/
+
 
 app.get('/', function(req, res){
   res.render('layout', {
@@ -71,39 +75,66 @@ app.get('/', function(req, res){
 app.post('/', function(req, res) {
 	console.log('random form submitted');
 	//const output = tools.bar();
-	console.log(req.body.latitude);
-
-	// req.checkBody('term', 'Search term required').notEmpty();
-	/**
-	var errors = req.validationErrors();
-	if(errors) {
-		console.log('errors');
-
-	} 
-*/
-	var sort = "rating";
-	switch(Math.floor(Math.random()*4)) {
-		case 0:
-			sort = "best_match"
-			break;
-		case 1:
-			sort = "rating"
-			break;
-		case 2:
-			sort = "review_count"
-			break;
-		case 3:
-			sort = "distance"
-			break;
+	//Assume this post request was the random selector unless otherwise specified
+	var rand = true;
+	if(req.body.latitude == null) {
+		rand = false;
 	}
-	//sort = "best_match";
-	const searchRequest = {
-		latitude: req.body.latitude,
-		longitude: req.body.longitude,
-	  term:'restaurant',
-	  sort_by: sort
-	  //location: 'chicago, il'
-	};
+
+	console.log(req.body.search + req.body.latitude2);
+
+
+
+	var searchRequest = {};
+	//if random, set random request
+	if(rand) {
+		var sort = "rating";
+		switch(Math.floor(Math.random()*4)) {
+			case 0:
+				sort = "best_match"
+				break;
+			case 1:
+				sort = "rating"
+				break;
+			case 2:
+				sort = "review_count"
+				break;
+			case 3:
+				sort = "distance"
+				break;
+		}
+		searchRequest = {
+			latitude: req.body.latitude,
+			longitude: req.body.longitude,
+		  	term:'restaurant',
+		  	sort_by: sort,
+		  	offset: Math.floor(Math.random()*(50))
+		  //location: 'chicago, il'
+		};
+	}
+	//if search, check search query
+	else {
+		req.checkBody('search', 'Search term required').notEmpty();
+		var errors = req.validationErrors();
+		if(errors) {
+			console.log('there areerrors');
+		    res.render('layout', {
+		    	title: "Yu-Lin's Yelp Recommender",
+		    	errors: errors,
+		    	click: false
+		    });
+		    console.log(errors[0].msg);
+		    return;
+		} 
+		else {
+			searchRequest = {
+				latitude: req.body.latitude2,
+				longitude: req.body.longitude2,
+			  	term: req.body.search,
+			  	sort_by: "best_match"
+			};
+		}
+	}
 	
 
 	yelp.accessToken(clientId, clientSecret).then(response => {
@@ -114,7 +145,11 @@ app.post('/', function(req, res) {
 	    const firstResult = response.jsonBody.businesses[Math.floor(Math.random()*(i))];
 		    
 	    var result =[];
-	    for (var i = response.jsonBody.businesses.length - 1; i >= 0; i--) {
+	    var queries = 10;
+	    if(response.jsonBody.businesses.length < 10) {
+	    	queries = response.jsonBody.businesses.length;
+	    }
+	    for (var i = 0; i < queries; i++) {
 	      var n = response.jsonBody.businesses[i].name;
 	      var r = response.jsonBody.businesses[i].price;
 	      var u = response.jsonBody.businesses[i].url;
@@ -123,14 +158,14 @@ app.post('/', function(req, res) {
 	      result.push({name: n, rating: r, url: u, image: p, distance: d});
 
 	    }
-	    console.log(result);
+	    //console.log(result);
 
 
 
 
 	    //const prettyJson = JSON.stringify(firstResult, null, 4);
-	    const prettyJson = JSON.stringify(result);
-	    console.log(prettyJson);
+	    //const prettyJson = JSON.stringify(result);
+	    //console.log(prettyJson);
 	    res.render('layout', {
 	    	title: "Yu-Lin's Yelp Recommender",
 	    	list: result,
@@ -142,13 +177,7 @@ app.post('/', function(req, res) {
 	  });
 	}).catch(e => {
 	  console.log(e);
-	});
-	//console.log(goodJson);
-	//res.json(goodJson);
-
-
-
-
+		});
 
 
 });

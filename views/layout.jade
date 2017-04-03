@@ -7,9 +7,12 @@ html
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')
   body
     block content
+    h5(id="message")
+    br
     h1 Yu-Lin's Yelp Recommender
     h5 Built for Capital One's web application challenge using Yelp's Fusion API.
     h5 Source code can be found #[a(href="https://github.com/yyang0087/yelp-express" target="_blank") here.]
+    
     h3 Would you like to see random restaurants in your location?
     .container()
         form(method = "POST" action = "/")
@@ -18,31 +21,35 @@ html
           button(type="submit",class="btn btn-danger btn-block", value="Submit") Give me something random
         hr
         br
-        h3 Or you can search for restaurants based on keyword
+        h3 Or you can search for restaurants based on a keyword:
         br
-        #groupbuttons
-          div(class=" btn-group btn-group-lg ",role = "group", aria-label="...")
-            .btn-group(role="group")
-              form(method = "POST" action = "/users/add")
-                button(type="submit",class="btn btn-default", value="Submit") $
-            .btn-group(role="group")
-              form(method = "POST" action = "/users/add")
-                button(type="submit",class="btn btn-default", value="Submit") $$
-            .btn-group(role="group")
-              form(method = "POST" action = "/users/add")
-                button(type="submit",class="btn btn-default", value="Submit") $$$
-            .btn-group( role="group")
-              form(method = "POST" action = "/users/add")
-                button(type="submit",class="btn btn-default", value="Submit") $$$$
+        //  
+          #groupbuttons
+            div(class=" btn-group btn-group-lg ",role = "group", aria-label="...")
+              .btn-group(role="group")
+                form(method = "POST" action = "/")
+                  button(type="submit",class="btn btn-default", value="Submit") $
+              .btn-group(role="group")
+                form(method = "POST" action = "/")
+                  button(type="submit",class="btn btn-default", value="Submit") $$
+              .btn-group(role="group")
+                form(method = "POST" action = "/")
+                  button(type="submit",class="btn btn-default", value="Submit") $$$
+              .btn-group( role="group")
+                form(method = "POST" action = "/")
+                  button(type="submit",class="btn btn-default", value="Submit") $$$$
         br
 
         #searchbutton
-          form(method = "POST" action = "/users/add")
+          form(method = "POST" action = "/")
             #box
-              input(type="text" name="search")
+              input(type="text" name="search" id="inputbox")
             br
+            input(type="hidden" name="latitude2" value=0)
+            input(type="hidden" name="longitude2" value=0)
             button(type="submit",class="btn btn-danger btn-default", value="Submit") Search
-
+      if errors
+        h6 #{errors[0].msg}
     br
     hr
     #content
@@ -65,23 +72,18 @@ html
                             img(#yelp  align="right" width="73" height="47" src="https://s3-media2.fl.yelpcdn.com/assets/srv0/styleguide/9f680ee1c533/assets/img/brand_guidelines/dont_recreate.png")
                 hr
         else
-          h5 click yes and that list will appear here
+          // h5 click yes and that list will appear here
 
 
     br
     br
     br
     section#3
+      
+      h4 You can find more stuff made by me #[a(href="http://yulinyang.me/" target="_blank") here.]
+      // Uncomment the following class hide to see the determined latitude and longitude
+      p(class = "hide" id = "demo")
 
-      h3 Ignore everything below thisss
-      p= list
-      block rando
-      button(onclick="getLocation()") Try it
-      p(id = "demo")
-      // script(src='/public/javascripts/sample.js')
-    form(method="POST" action="/")
-
-      input(type = "submit" value="Submit2" onclick="getLocation")
 
 
 
@@ -89,9 +91,9 @@ html
     script.
       var x = document.getElementById("demo");
       window.onload = function getLocation() {
-
+          document.getElementById('message').innerHTML = "Please wait until your location can be determined";
           if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(showPosition);
+              navigator.geolocation.getCurrentPosition(showPosition, onError);
           } else { 
               x.innerHTML = "Geolocation is not supported by this browser.";
           }
@@ -100,18 +102,18 @@ html
       function showPosition(position) {
           x.innerHTML = "Latitude: " + position.coords.latitude + 
           "<br>Longitude: " + position.coords.longitude;
+          document.getElementById('message').innerHTML = "Location obtained; go ahead and try it out!";
+          //random form lat/long
           document.querySelector("[name='latitude']").value = position.coords.latitude;
           document.querySelector("[name='longitude']").value = position.coords.longitude;
+          //search form lat/long
+          document.querySelector("[name='latitude2']").value = position.coords.latitude;
+          document.querySelector("[name='longitude2']").value = position.coords.longitude;
           document.querySelector("[type='submit']").removeAttribute("disabled");
-          temp();
 
       }
-      function temp() {
-          let iterable = [10, 20, 30];
-          for (let value of iterable) {
-            value += 1;
-            console.log(value);
-          }
+      function onError() {
+          document.getElementById('message').innerHTML = "Location could not be obtained. This demo will not work unless location is enabled";
       }
 
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
