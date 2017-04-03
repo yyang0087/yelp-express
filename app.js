@@ -127,11 +127,30 @@ app.post('/', function(req, res) {
 		    return;
 		} 
 		else {
+			var price = "";
+			if(req.body.ratings == 0) {
+				price = "4";
+			}
+			else {
+				var key = ''+req.body.ratings.toString();
+				while(key.length < 4) {
+					key = "0"+key;
+				}
+				console.log('this is key: '+key);
+				for(var i = 1; i <= 4; i++ ){
+					if(parseInt(key.charAt(i-1)) == 1) {
+						price += i + ",";
+					} 
+				}
+				price = price.substring(0,price.length-1);
+			}
+			console.log("this is price: "+price);
 			searchRequest = {
 				latitude: req.body.latitude2,
 				longitude: req.body.longitude2,
 			  	term: req.body.search,
-			  	sort_by: "best_match"
+			  	sort_by: "distance",
+			  	price: price
 			};
 		}
 	}
@@ -155,7 +174,8 @@ app.post('/', function(req, res) {
 	      var u = response.jsonBody.businesses[i].url;
 	      var p = response.jsonBody.businesses[i].image_url;
 	      var d = Math.floor(response.jsonBody.businesses[i].distance)/1000;
-	      result.push({name: n, rating: r, url: u, image: p, distance: d});
+	      var a = response.jsonBody.businesses[i].location.display_address;
+	      result.push({name: n, rating: r, url: u, image: p, distance: d, address: a});
 
 	    }
 	    //console.log(result);

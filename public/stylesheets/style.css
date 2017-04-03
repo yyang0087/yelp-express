@@ -3,23 +3,41 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 a {
-  color: #00b7ff;
+  color: #fff;
 }
-body h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #069;
+body h1 {
+  color: #fff;
   text-align: center;
 }
-.btn-primary,
-.btn-primary:hover,
-.btn-primary:active,
-.btn-primary:visited,
-.btn-primary:focus {
-  color: #ffc0cb;
+body h2 {
+  color: #fff;
+  text-align: center;
+}
+body h3 {
+  color: #fff;
+  text-align: center;
+}
+body h4 {
+  color: #f00;
+}
+#footer {
+  font-size: 1.2em;
+  text-align: center;
+}
+body h5 {
+  color: #fff;
+  text-align: center;
+}
+body p {
+  color: #000;
+}
+#footer p {
+  text-align: center;
+}
+body {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url("https://s3.postimg.org/tddpocr43/image.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 615px;
 }
 body .container #groupbuttons {
   text-align: center;
